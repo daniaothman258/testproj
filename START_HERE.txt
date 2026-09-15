@@ -1,0 +1,31 @@
+BURDA FASHION — START HERE
+==========================
+
+1) افتح مجلد BURDA_FASHION داخل VS Code.
+
+2) شغّل الـ Backend في Terminal رقم 1:
+   cd server
+   npm install
+   npm run dev
+
+   يجب أن يظهر:
+   BURDA server running on http://localhost:5000
+
+3) اترك Terminal رقم 1 مفتوحاً، وافتح Terminal جديد رقم 2:
+   cd client
+   npm install
+   npm run dev
+
+4) افتح الرابط الذي يظهر من Vite، عادة:
+   http://localhost:5173
+
+مهم:
+- لا تفتح http://localhost:5000 كواجهة للموقع؛ هذا هو الـ API فقط.
+- لفحص السيرفر افتح: http://localhost:5000/api/health
+- النسخة الحالية تستخدم Vite proxy، لذلك لا تحتاج إلى ضبط VITE_API_URL للتشغيل المحلي.
+
+ADMIN TEST LOGIN
+Username: OSAMA25
+Password: dania!!
+
+قاعدة البيانات SQLite تُنشأ تلقائياً داخل server/burda.db عند تشغيل السيرفر أول مرة.

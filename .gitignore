@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Secrets
+.env
+**/.env
+
+# Build files
+client/dist/
+dist/
+
+# Local database
+burda.db
+server/burda.db
+
+# Uploads
+server/uploads/
+uploads/
+
+# Logs
+*.log
