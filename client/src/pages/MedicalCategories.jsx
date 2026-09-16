@@ -7,7 +7,6 @@ import {
 } from "react-icons/fa";
 
 import { useShop } from "../context/ShopContext";
-import { API_URL } from "../services/api";
 
 export default function MedicalCategories() {
   const { products, lang } = useShop();
@@ -54,8 +53,8 @@ export default function MedicalCategories() {
     <main className="max-w-7xl mx-auto px-4 py-14 md:py-20">
 
       {/* PAGE TITLE */}
-      <div className="mb-12">
 
+      <div className="mb-12">
         <span className="text-[10px] tracking-[.3em] opacity-50">
           BURDA MEDICAL
         </span>
@@ -71,15 +70,13 @@ export default function MedicalCategories() {
             ? "اختر المنتج للاطلاع على التفاصيل والمقاسات والألوان المتاحة."
             : "Choose a product to view details, available sizes and colours."}
         </p>
-
       </div>
 
-
       {/* PRODUCT CARDS */}
+
       <div className="grid md:grid-cols-2 gap-7">
 
         {medicalProducts.map((item) => {
-
           const image =
             item.product?.images?.[0];
 
@@ -110,6 +107,7 @@ export default function MedicalCategories() {
               >
 
                 {/* IMAGE */}
+
                 <div
                   className="
                     h-[460px]
@@ -124,9 +122,8 @@ export default function MedicalCategories() {
                 >
 
                   {image ? (
-
                     <img
-                      src={`${API_URL}${image}`}
+                      src={image}
                       alt={
                         ar
                           ? item.nameAr
@@ -142,27 +139,23 @@ export default function MedicalCategories() {
                         hover:scale-[1.02]
                       "
                     />
-
                   ) : (
-
                     <div className="text-8xl">
                       {item.id === "medical-001"
                         ? "🥼"
                         : "👕"}
                     </div>
-
                   )}
 
                 </div>
 
-
                 {/* PRODUCT INFORMATION */}
+
                 <div className="p-7">
 
                   <span className="text-[10px] tracking-[.28em] opacity-45">
                     BURDA MEDICAL
                   </span>
-
 
                   <div
                     className="
@@ -180,21 +173,20 @@ export default function MedicalCategories() {
                         : item.nameEn}
                     </h2>
 
-                    {price && (
-                      <strong className="whitespace-nowrap">
-                        {price} JOD
-                      </strong>
-                    )}
+                    {price !== undefined &&
+                      price !== null && (
+                        <strong className="whitespace-nowrap">
+                          {price} JOD
+                        </strong>
+                      )}
 
                   </div>
-
 
                   <p className="mt-4 text-sm leading-7 opacity-60">
                     {ar
                       ? item.descriptionAr
                       : item.descriptionEn}
                   </p>
-
 
                   <div
                     className="
