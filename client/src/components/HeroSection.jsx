@@ -417,7 +417,7 @@ export default function HeroSection() {
               right-4
               top-[calc(100%-4px)]
               z-50
-              w-[260px]
+              w-[min(80vw,260px)]
               rounded-2xl
               border
               p-5
@@ -494,6 +494,14 @@ export default function HeroSection() {
           ALWAYS LTR STRUCTURE
           TEXT LEFT
           DOCTOR RIGHT
+
+          RESPONSIVE NOTE:
+          Below the md breakpoint the two columns stack
+          (text first, doctor visual second) since the
+          fixed 46%/54% split combined with the doctor's
+          min-width cannot fit small screens without
+          overlap. From md upward the exact original
+          side-by-side desktop composition is restored.
       ====================================================== */}
 
       <div
@@ -503,12 +511,17 @@ export default function HeroSection() {
           z-10
           mx-auto
           grid
-          min-h-[calc(100vh-clamp(64px,6vw,92px))]
+          min-h-fit
           w-full
           max-w-[1500px]
-          grid-cols-[46%_54%]
+          grid-cols-1
           items-stretch
+          gap-y-10
           px-[clamp(14px,3.2vw,48px)]
+
+          md:min-h-[calc(100vh-clamp(64px,6vw,92px))]
+          md:grid-cols-[46%_54%]
+          md:gap-y-0
         "
       >
         {/* ======================================================
@@ -571,13 +584,16 @@ export default function HeroSection() {
           <h1
             dir="ltr"
             className="
-              w-[112%]
+              w-full
               max-w-[760px]
               uppercase
               font-black
               text-[clamp(2rem,6.2vw,6.7rem)]
               leading-[0.82]
               tracking-[-0.055em]
+
+              sm:w-[105%]
+              md:w-[112%]
             "
             style={{
               fontFamily:
@@ -687,9 +703,12 @@ export default function HeroSection() {
               mt-[clamp(15px,2vw,30px)]
               flex
               flex-row
+              flex-wrap
               items-center
               gap-[clamp(6px,1vw,16px)]
-              whitespace-nowrap
+
+              sm:flex-nowrap
+              sm:whitespace-nowrap
             "
           >
             <Link
@@ -782,9 +801,12 @@ export default function HeroSection() {
             className="
               mt-[clamp(20px,5vw,75px)]
               flex
+              flex-wrap
               items-center
               gap-[clamp(5px,1.2vw,20px)]
-              whitespace-nowrap
+
+              sm:flex-nowrap
+              sm:whitespace-nowrap
             "
           >
             {/* 10K */}
@@ -934,13 +956,26 @@ export default function HeroSection() {
           className="
             relative
             z-10
-            min-h-[500px]
             overflow-visible
+
+            md:min-h-[460px]
+            lg:min-h-[500px]
           "
         >
           {/* ======================================================
               DOCTOR
               ALWAYS RIGHT
+
+              RESPONSIVE NOTE:
+              Below md (while the grid is still a single stacked
+              column) the image stays in normal flow and centered,
+              so it can never overlap the text block above it. From
+              md upward — exactly where the grid switches back to
+              the 46%/54% side-by-side layout — the image becomes
+              absolutely positioned again to reproduce the original
+              bleed effect. The original lg-and-up values
+              (right-[-29%], w-[78vw], min-w-[650px], and the
+              1100px/1400px overrides) are untouched.
           ====================================================== */}
 
           <motion.img
@@ -948,17 +983,31 @@ export default function HeroSection() {
             alt="BURDA Medical doctor"
             draggable="false"
             className="
-              absolute
-              bottom-0
-              right-[-29%]
-              z-10
+              relative
+              mx-auto
+              block
               h-auto
-              w-[78vw]
-              min-w-[650px]
-              max-w-[1120px]
+              w-[80vw]
+              max-w-[360px]
               select-none
               object-contain
               object-bottom
+
+              sm:w-[68vw]
+              sm:max-w-[440px]
+
+              md:absolute
+              md:bottom-0
+              md:right-[-18%]
+              md:mx-0
+              md:w-[80vw]
+              md:min-w-[440px]
+              md:max-w-[720px]
+
+              lg:right-[-29%]
+              lg:w-[78vw]
+              lg:min-w-[650px]
+              lg:max-w-[1120px]
 
               min-[1100px]:right-[-25%]
               min-[1400px]:right-[-20%]
@@ -991,8 +1040,8 @@ export default function HeroSection() {
             }}
             className="
               absolute
-              right-[1%]
-              top-[24%]
+              right-[2%]
+              top-[2%]
               z-30
               flex
               rotate-[-7deg]
@@ -1002,6 +1051,15 @@ export default function HeroSection() {
               leading-[0.92]
               text-[#8a8a8a]
               opacity-90
+
+              sm:right-[3%]
+              sm:top-[8%]
+
+              md:top-[16%]
+              md:right-[2%]
+
+              lg:top-[24%]
+              lg:right-[1%]
             "
             style={{
               fontFamily:
