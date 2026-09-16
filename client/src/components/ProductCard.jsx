@@ -9,7 +9,6 @@ import {
 } from "react-icons/fa";
 
 import { useShop } from "../context/ShopContext";
-import { API_URL } from "../services/api";
 
 export default function ProductCard({ p }) {
   const {
@@ -82,7 +81,7 @@ export default function ProductCard({ p }) {
         {p.images?.[0] ? (
           <img
             loading="lazy"
-            src={`${API_URL}${p.images[0]}`}
+            src={p.images[0]}
             alt={title}
             className="
               h-full

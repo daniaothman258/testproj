@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { api, API_URL } from "../services/api";
+import { api } from "../services/api";
 import { useShop } from "../context/ShopContext";
 
 export default function ProductDetails() {
@@ -92,7 +92,7 @@ export default function ProductDetails() {
           >
             {p.images?.[activeImage] ? (
               <img
-                src={`${API_URL}${p.images[activeImage]}`}
+                src={p.images[activeImage]}
                 alt={title}
                 className="
                   w-full
@@ -113,7 +113,7 @@ export default function ProductDetails() {
             <div className="grid grid-cols-4 gap-3 mt-4">
               {p.images.map((image, index) => (
                 <button
-                  key={image}
+                  key={`${image}-${index}`}
                   type="button"
                   onClick={() => setActiveImage(index)}
                   className={`
@@ -131,7 +131,7 @@ export default function ProductDetails() {
                   `}
                 >
                   <img
-                    src={`${API_URL}${image}`}
+                    src={image}
                     alt={`${title} ${index + 1}`}
                     className="
                       w-full
