@@ -14,7 +14,6 @@ import {
 } from "react-icons/fa";
 
 import BurdaLogo from "../assets/logo/burda-logo-original.png";
-
 import { useShop } from "../context/ShopContext";
 
 export default function HeroSection() {
@@ -59,15 +58,10 @@ export default function HeroSection() {
         overflow-hidden
         transition-colors
         duration-500
-
-        md:min-h-screen
         ${dark ? "bg-black text-white" : "bg-white text-black"}
       `}
     >
-      {/* ======================================================
-          BACKGROUND
-      ====================================================== */}
-
+      {/* BACKGROUND */}
       <div className="pointer-events-none absolute inset-0">
         <div
           className={`
@@ -80,7 +74,6 @@ export default function HeroSection() {
             max-w-[700px]
             rounded-full
             blur-[120px]
-
             ${
               dark
                 ? "bg-white/[0.04]"
@@ -90,14 +83,8 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* ======================================================
-          HEADER
-      ====================================================== */}
-
-      <header
-        dir="ltr"
-        className="relative z-50"
-      >
+      {/* HEADER */}
+      <header dir="ltr" className="relative z-50">
         <div
           dir="ltr"
           className="
@@ -112,10 +99,7 @@ export default function HeroSection() {
             px-[clamp(16px,3.2vw,48px)]
           "
         >
-          {/* ======================================================
-              LOGO
-          ====================================================== */}
-
+          {/* LOGO */}
           <Link
             to="/"
             className="flex shrink-0 items-center"
@@ -135,11 +119,7 @@ export default function HeroSection() {
             />
           </Link>
 
-          {/* ======================================================
-              NAVIGATION
-              STRUCTURE ALWAYS LTR
-          ====================================================== */}
-
+          {/* NAVIGATION */}
           <nav
             dir="ltr"
             className="
@@ -166,7 +146,6 @@ export default function HeroSection() {
                     font-medium
                     transition-colors
                     duration-300
-
                     ${
                       isActive
                         ? dark
@@ -202,10 +181,7 @@ export default function HeroSection() {
             ))}
           </nav>
 
-          {/* ======================================================
-              HEADER ACTIONS
-          ====================================================== */}
-
+          {/* HEADER ACTIONS */}
           <div
             dir="ltr"
             className="
@@ -216,7 +192,6 @@ export default function HeroSection() {
             "
           >
             {/* SEARCH */}
-
             <Link
               to="/products"
               aria-label="Search"
@@ -228,7 +203,6 @@ export default function HeroSection() {
                 rounded-full
                 text-[clamp(14px,1.4vw,19px)]
                 transition
-
                 ${
                   dark
                     ? "text-white hover:bg-white/10"
@@ -240,7 +214,6 @@ export default function HeroSection() {
             </Link>
 
             {/* CART */}
-
             <Link
               to="/cart"
               aria-label="Shopping cart"
@@ -253,7 +226,6 @@ export default function HeroSection() {
                 rounded-full
                 text-[clamp(14px,1.4vw,19px)]
                 transition
-
                 ${
                   dark
                     ? "text-white hover:bg-white/10"
@@ -276,7 +248,6 @@ export default function HeroSection() {
                   px-1
                   text-[8px]
                   font-black
-
                   ${
                     dark
                       ? "bg-white text-black"
@@ -289,7 +260,6 @@ export default function HeroSection() {
             </Link>
 
             {/* ADMIN */}
-
             <Link
               to="/admin/login"
               aria-label="Admin Dashboard"
@@ -303,7 +273,6 @@ export default function HeroSection() {
                 text-[clamp(14px,1.4vw,19px)]
                 transition
                 min-[620px]:grid
-
                 ${
                   dark
                     ? "text-white hover:bg-white/10"
@@ -315,7 +284,6 @@ export default function HeroSection() {
             </Link>
 
             {/* LIGHT / DARK */}
-
             <button
               type="button"
               onClick={() => setDark(!dark)}
@@ -329,7 +297,6 @@ export default function HeroSection() {
                 rounded-full
                 text-[clamp(14px,1.4vw,19px)]
                 transition
-
                 ${
                   dark
                     ? "text-white hover:bg-white/10"
@@ -341,7 +308,6 @@ export default function HeroSection() {
             </button>
 
             {/* LANGUAGE */}
-
             <button
               type="button"
               onClick={() => setLang(ar ? "en" : "ar")}
@@ -360,7 +326,6 @@ export default function HeroSection() {
                 font-black
                 tracking-wider
                 transition
-
                 ${
                   dark
                     ? "border-white/30 text-white hover:bg-white hover:text-black"
@@ -372,7 +337,6 @@ export default function HeroSection() {
             </button>
 
             {/* MENU */}
-
             <button
               type="button"
               onClick={() => setMenuOpen((prev) => !prev)}
@@ -385,7 +349,6 @@ export default function HeroSection() {
                 rounded-full
                 text-[clamp(16px,1.5vw,21px)]
                 transition
-
                 ${
                   dark
                     ? "text-white hover:bg-white/10"
@@ -398,10 +361,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* ======================================================
-            DROPDOWN MENU
-        ====================================================== */}
-
+        {/* DROPDOWN MENU */}
         {menuOpen && (
           <motion.div
             initial={{
@@ -423,7 +383,6 @@ export default function HeroSection() {
               p-5
               shadow-2xl
               backdrop-blur-xl
-
               ${
                 dark
                   ? "border-white/10 bg-neutral-950/95"
@@ -443,7 +402,6 @@ export default function HeroSection() {
                     py-3
                     text-sm
                     last:border-0
-
                     ${
                       dark
                         ? "border-white/10 text-neutral-300 hover:text-white"
@@ -468,7 +426,6 @@ export default function HeroSection() {
                   py-3
                   text-sm
                   font-bold
-
                   ${
                     dark
                       ? "bg-white/10 text-white"
@@ -477,54 +434,31 @@ export default function HeroSection() {
                 `}
               >
                 <FaUserShield />
-
-                {ar
-                  ? "لوحة تحكم الأدمن"
-                  : "Admin Dashboard"}
+                {ar ? "لوحة تحكم الأدمن" : "Admin Dashboard"}
               </Link>
             </nav>
           </motion.div>
         )}
       </header>
 
-      {/* ======================================================
-          HERO MAIN
-
-          IMPORTANT:
-          ALWAYS LTR STRUCTURE
-          TEXT ONLY — CENTERED SINGLE COLUMN
-
-          RESPONSIVE NOTE:
-          The former right-hand column only ever held the
-          decorative "Care Looks Better Here" flourish (no doctor
-          image was present). Now that the flourish is removed,
-          the grid is a single full-width column at every
-          breakpoint, so no empty column or reserved height is
-          left behind on mobile or desktop.
-      ====================================================== */}
-
+      {/* HERO MAIN */}
       <div
         dir="ltr"
         className="
           relative
           z-10
           mx-auto
-          grid
           w-full
           max-w-[1500px]
-          grid-cols-1
-          items-center
-          gap-y-6
           px-[clamp(14px,3.2vw,48px)]
-          py-[clamp(16px,4vw,32px)]
+          pt-5
+          pb-4
 
-          md:py-[clamp(32px,6vw,64px)]
+          md:pt-0
+          md:pb-0
         "
       >
-        {/* ======================================================
-            LEFT CONTENT
-        ====================================================== */}
-
+        {/* LEFT / MAIN CONTENT */}
         <motion.div
           initial={{
             opacity: 0,
@@ -546,13 +480,14 @@ export default function HeroSection() {
             min-w-0
             flex-col
             justify-center
-            py-[clamp(30px,5vw,75px)]
+            py-4
+
+            md:min-h-[calc(100vh-clamp(64px,6vw,92px))]
+            md:w-[46%]
+            md:py-[clamp(30px,5vw,75px)]
           "
         >
-          {/* ======================================================
-              SMALL TITLE
-          ====================================================== */}
-
+          {/* SMALL TITLE */}
           <span
             dir="ltr"
             className={`
@@ -562,7 +497,6 @@ export default function HeroSection() {
               font-semibold
               uppercase
               tracking-[0.30em]
-
               ${
                 dark
                   ? "text-neutral-400"
@@ -573,11 +507,7 @@ export default function HeroSection() {
             PREMIUM MEDICAL FASHION
           </span>
 
-          {/* ======================================================
-              MAIN TITLE
-              SAME POSITION IN AR + EN
-          ====================================================== */}
-
+          {/* MAIN TITLE */}
           <h1
             dir="ltr"
             className="
@@ -592,18 +522,17 @@ export default function HeroSection() {
               sm:text-[clamp(2.6rem,9vw,6.7rem)]
               sm:leading-[0.82]
               sm:tracking-[-0.055em]
+              sm:w-[105%]
+              md:w-[112%]
             "
             style={{
               fontFamily:
                 "'Arial Black', 'Helvetica Neue', Arial, sans-serif",
             }}
           >
-            {/* STYLE */}
-
             <span
               className={`
                 block
-
                 ${
                   dark
                     ? "text-[#f7f7f7]"
@@ -619,13 +548,10 @@ export default function HeroSection() {
               STYLE
             </span>
 
-            {/* FOR A */}
-
             <span
               className={`
                 mt-[0.04em]
                 block
-
                 ${
                   dark
                     ? "text-[#9a9a9a]"
@@ -641,15 +567,11 @@ export default function HeroSection() {
               FOR A
             </span>
 
-            {/* HEALTHIER YOU */}
-
             <span
               className={`
                 block
                 whitespace-normal
-
                 sm:whitespace-nowrap
-
                 ${
                   dark
                     ? "text-[#9a9a9a]"
@@ -666,10 +588,7 @@ export default function HeroSection() {
             </span>
           </h1>
 
-          {/* ======================================================
-              DESCRIPTION
-          ====================================================== */}
-
+          {/* DESCRIPTION */}
           <p
             dir={ar ? "rtl" : "ltr"}
             className={`
@@ -678,9 +597,7 @@ export default function HeroSection() {
               pr-2
               text-[clamp(13px,1.05vw,17px)]
               leading-[1.55]
-
               ${ar ? "text-right" : "text-left"}
-
               ${
                 dark
                   ? "text-neutral-300"
@@ -693,10 +610,7 @@ export default function HeroSection() {
               : "Modern medical wear designed for professionals who care. Quality, comfort and elegance — only at BURDA."}
           </p>
 
-          {/* ======================================================
-              BUTTONS
-          ====================================================== */}
-
+          {/* BUTTONS */}
           <div
             dir="ltr"
             className="
@@ -728,7 +642,6 @@ export default function HeroSection() {
                 transition
                 duration-300
                 hover:-translate-y-1
-
                 ${
                   dark
                     ? "bg-white text-black"
@@ -772,7 +685,6 @@ export default function HeroSection() {
                   border
                   text-[clamp(12px,1.15vw,18px)]
                   transition
-
                   ${
                     dark
                       ? "border-white/70"
@@ -791,15 +703,11 @@ export default function HeroSection() {
             </a>
           </div>
 
-          {/* ======================================================
-              STATS
-              STRUCTURE NEVER FLIPS
-          ====================================================== */}
-
+          {/* STATS */}
           <div
             dir="ltr"
             className="
-              mt-[clamp(24px,5vw,75px)]
+              mt-6
               flex
               flex-wrap
               items-center
@@ -808,10 +716,9 @@ export default function HeroSection() {
 
               sm:flex-nowrap
               sm:whitespace-nowrap
+              md:mt-[clamp(24px,5vw,75px)]
             "
           >
-            {/* 10K */}
-
             <div className="min-w-[clamp(70px,8vw,120px)]">
               <strong
                 dir="ltr"
@@ -830,7 +737,6 @@ export default function HeroSection() {
                   mt-1
                   block
                   text-[clamp(9px,0.7vw,11px)]
-
                   ${
                     dark
                       ? "text-neutral-300"
@@ -846,7 +752,6 @@ export default function HeroSection() {
               className={`
                 h-[clamp(24px,3vw,42px)]
                 w-px
-
                 ${
                   dark
                     ? "bg-white/25"
@@ -854,8 +759,6 @@ export default function HeroSection() {
                 }
               `}
             />
-
-            {/* 500 */}
 
             <div className="min-w-[clamp(70px,8vw,120px)]">
               <strong
@@ -875,7 +778,6 @@ export default function HeroSection() {
                   mt-1
                   block
                   text-[clamp(9px,0.7vw,11px)]
-
                   ${
                     dark
                       ? "text-neutral-300"
@@ -891,7 +793,6 @@ export default function HeroSection() {
               className={`
                 h-[clamp(24px,3vw,42px)]
                 w-px
-
                 ${
                   dark
                     ? "bg-white/25"
@@ -899,8 +800,6 @@ export default function HeroSection() {
                 }
               `}
             />
-
-            {/* RATING */}
 
             <div className="min-w-[clamp(70px,8vw,120px)]">
               <strong
@@ -920,7 +819,6 @@ export default function HeroSection() {
                   mt-1
                   block
                   text-[clamp(9px,0.7vw,11px)]
-
                   ${
                     dark
                       ? "text-neutral-300"
