@@ -13,7 +13,6 @@ import {
   FaSun,
 } from "react-icons/fa";
 
-import DoctorImage from "../assets/logo/osama.png";
 import BurdaLogo from "../assets/logo/burda-logo-original.png";
 
 import { useShop } from "../context/ShopContext";
@@ -514,9 +513,10 @@ export default function HeroSection() {
           min-h-fit
           w-full
           max-w-[1500px]
-          grid-cols-1
+          min-h-[clamp(500px,72vh,760px)]
+          grid-cols-[62%_38%]
           items-stretch
-          gap-y-10
+          gap-y-0
           px-[clamp(14px,3.2vw,48px)]
 
           md:min-h-[calc(100vh-clamp(64px,6vw,92px))]
@@ -588,7 +588,7 @@ export default function HeroSection() {
               max-w-[760px]
               uppercase
               font-black
-              text-[clamp(2rem,6.2vw,6.7rem)]
+              text-[clamp(1.55rem,6.2vw,6.7rem)]
               leading-[0.82]
               tracking-[-0.055em]
 
@@ -978,49 +978,7 @@ export default function HeroSection() {
               1100px/1400px overrides) are untouched.
           ====================================================== */}
 
-          <motion.img
-            src={DoctorImage}
-            alt="BURDA Medical doctor"
-            draggable="false"
-            className="
-              relative
-              mx-auto
-              block
-              h-auto
-              w-[80vw]
-              max-w-[360px]
-              select-none
-              object-contain
-              object-bottom
-
-              sm:w-[68vw]
-              sm:max-w-[440px]
-
-              md:absolute
-              md:bottom-0
-              md:right-[-18%]
-              md:mx-0
-              md:w-[80vw]
-              md:min-w-[440px]
-              md:max-w-[720px]
-
-              lg:right-[-29%]
-              lg:w-[78vw]
-              lg:min-w-[650px]
-              lg:max-w-[1120px]
-
-              min-[1100px]:right-[-25%]
-              min-[1400px]:right-[-20%]
-            "
-            animate={{
-              y: [0, -5, 0],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
+          
 
           {/* ======================================================
               CARE LOOKS BETTER HERE
@@ -1040,8 +998,8 @@ export default function HeroSection() {
             }}
             className="
               absolute
-              right-[2%]
-              top-[2%]
+              right-[4%]
+              top-[8%]
               z-30
               flex
               rotate-[-7deg]
@@ -1052,14 +1010,14 @@ export default function HeroSection() {
               text-[#8a8a8a]
               opacity-90
 
-              sm:right-[3%]
+              sm:right-[5%]
               sm:top-[8%]
 
-              md:top-[16%]
-              md:right-[2%]
+              md:right-[5%]
+              md:top-[8%]
 
-              lg:top-[24%]
-              lg:right-[1%]
+              lg:right-[5%]
+              lg:top-[8%]
             "
             style={{
               fontFamily:
