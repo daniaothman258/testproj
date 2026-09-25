@@ -56,10 +56,11 @@ export default function HeroSection() {
       dir="ltr"
       className={`
         relative
-        min-h-screen
         overflow-hidden
         transition-colors
         duration-500
+
+        md:min-h-screen
         ${dark ? "bg-black text-white" : "bg-white text-black"}
       `}
     >
@@ -491,16 +492,15 @@ export default function HeroSection() {
 
           IMPORTANT:
           ALWAYS LTR STRUCTURE
-          TEXT LEFT
-          DOCTOR RIGHT
+          TEXT ONLY — CENTERED SINGLE COLUMN
 
           RESPONSIVE NOTE:
-          Below the md breakpoint the two columns stack
-          (text first, doctor visual second) since the
-          fixed 46%/54% split combined with the doctor's
-          min-width cannot fit small screens without
-          overlap. From md upward the exact original
-          side-by-side desktop composition is restored.
+          The former right-hand column only ever held the
+          decorative "Care Looks Better Here" flourish (no doctor
+          image was present). Now that the flourish is removed,
+          the grid is a single full-width column at every
+          breakpoint, so no empty column or reserved height is
+          left behind on mobile or desktop.
       ====================================================== */}
 
       <div
@@ -510,18 +510,15 @@ export default function HeroSection() {
           z-10
           mx-auto
           grid
-          min-h-fit
           w-full
           max-w-[1500px]
-          min-h-[clamp(500px,72vh,760px)]
-          grid-cols-[62%_38%]
-          items-stretch
-          gap-y-0
+          grid-cols-1
+          items-center
+          gap-y-6
           px-[clamp(14px,3.2vw,48px)]
+          py-[clamp(16px,4vw,32px)]
 
-          md:min-h-[calc(100vh-clamp(64px,6vw,92px))]
-          md:grid-cols-[46%_54%]
-          md:gap-y-0
+          md:py-[clamp(32px,6vw,64px)]
         "
       >
         {/* ======================================================
@@ -561,7 +558,7 @@ export default function HeroSection() {
             className={`
               mb-[clamp(10px,1.5vw,24px)]
               whitespace-nowrap
-              text-[clamp(6px,0.75vw,12px)]
+              text-[clamp(9px,0.75vw,12px)]
               font-semibold
               uppercase
               tracking-[0.30em]
@@ -588,12 +585,13 @@ export default function HeroSection() {
               max-w-[760px]
               uppercase
               font-black
-              text-[clamp(1.55rem,6.2vw,6.7rem)]
-              leading-[0.82]
-              tracking-[-0.055em]
+              text-[clamp(2rem,11vw,6.7rem)]
+              leading-[0.86]
+              tracking-[-0.03em]
 
-              sm:w-[105%]
-              md:w-[112%]
+              sm:text-[clamp(2.6rem,9vw,6.7rem)]
+              sm:leading-[0.82]
+              sm:tracking-[-0.055em]
             "
             style={{
               fontFamily:
@@ -648,7 +646,9 @@ export default function HeroSection() {
             <span
               className={`
                 block
-                whitespace-nowrap
+                whitespace-normal
+
+                sm:whitespace-nowrap
 
                 ${
                   dark
@@ -676,7 +676,7 @@ export default function HeroSection() {
               mt-[clamp(14px,2vw,30px)]
               max-w-[460px]
               pr-2
-              text-[clamp(8px,1.05vw,17px)]
+              text-[clamp(13px,1.05vw,17px)]
               leading-[1.55]
 
               ${ar ? "text-right" : "text-left"}
@@ -705,7 +705,7 @@ export default function HeroSection() {
               flex-row
               flex-wrap
               items-center
-              gap-[clamp(6px,1vw,16px)]
+              gap-[clamp(10px,1vw,16px)]
 
               sm:flex-nowrap
               sm:whitespace-nowrap
@@ -716,13 +716,13 @@ export default function HeroSection() {
               className={`
                 group
                 inline-flex
-                min-h-[clamp(32px,4vw,60px)]
+                min-h-[clamp(38px,4vw,60px)]
                 items-center
                 justify-center
-                gap-[clamp(8px,2vw,30px)]
+                gap-[clamp(10px,2vw,30px)]
                 rounded-full
-                px-[clamp(12px,2vw,30px)]
-                text-[clamp(7px,0.9vw,14px)]
+                px-[clamp(16px,2vw,30px)]
+                text-[clamp(11px,0.9vw,14px)]
                 font-bold
                 shadow-lg
                 transition
@@ -742,7 +742,7 @@ export default function HeroSection() {
 
               <span
                 dir="ltr"
-                className="text-[clamp(12px,1.5vw,20px)]"
+                className="text-[clamp(14px,1.5vw,20px)]"
               >
                 {ar ? "←" : "→"}
               </span>
@@ -756,21 +756,21 @@ export default function HeroSection() {
                 group
                 inline-flex
                 items-center
-                gap-[clamp(5px,0.8vw,12px)]
-                text-[clamp(6px,0.85vw,14px)]
+                gap-[clamp(8px,0.8vw,12px)]
+                text-[clamp(11px,0.85vw,14px)]
                 font-semibold
               "
             >
               <span
                 className={`
                   grid
-                  h-[clamp(30px,3.8vw,56px)]
-                  w-[clamp(30px,3.8vw,56px)]
+                  h-[clamp(34px,3.8vw,56px)]
+                  w-[clamp(34px,3.8vw,56px)]
                   shrink-0
                   place-items-center
                   rounded-full
                   border
-                  text-[clamp(9px,1.15vw,18px)]
+                  text-[clamp(12px,1.15vw,18px)]
                   transition
 
                   ${
@@ -799,11 +799,12 @@ export default function HeroSection() {
           <div
             dir="ltr"
             className="
-              mt-[clamp(20px,5vw,75px)]
+              mt-[clamp(24px,5vw,75px)]
               flex
               flex-wrap
               items-center
-              gap-[clamp(5px,1.2vw,20px)]
+              gap-x-[clamp(14px,1.2vw,20px)]
+              gap-y-4
 
               sm:flex-nowrap
               sm:whitespace-nowrap
@@ -811,12 +812,12 @@ export default function HeroSection() {
           >
             {/* 10K */}
 
-            <div className="min-w-[clamp(55px,8vw,120px)]">
+            <div className="min-w-[clamp(70px,8vw,120px)]">
               <strong
                 dir="ltr"
                 className="
                   block
-                  text-[clamp(9px,1.25vw,19px)]
+                  text-[clamp(13px,1.25vw,19px)]
                   font-black
                 "
               >
@@ -828,7 +829,7 @@ export default function HeroSection() {
                 className={`
                   mt-1
                   block
-                  text-[clamp(5px,0.7vw,11px)]
+                  text-[clamp(9px,0.7vw,11px)]
 
                   ${
                     dark
@@ -856,12 +857,12 @@ export default function HeroSection() {
 
             {/* 500 */}
 
-            <div className="min-w-[clamp(55px,8vw,120px)]">
+            <div className="min-w-[clamp(70px,8vw,120px)]">
               <strong
                 dir="ltr"
                 className="
                   block
-                  text-[clamp(9px,1.25vw,19px)]
+                  text-[clamp(13px,1.25vw,19px)]
                   font-black
                 "
               >
@@ -873,7 +874,7 @@ export default function HeroSection() {
                 className={`
                   mt-1
                   block
-                  text-[clamp(5px,0.7vw,11px)]
+                  text-[clamp(9px,0.7vw,11px)]
 
                   ${
                     dark
@@ -901,12 +902,12 @@ export default function HeroSection() {
 
             {/* RATING */}
 
-            <div className="min-w-[clamp(55px,8vw,120px)]">
+            <div className="min-w-[clamp(70px,8vw,120px)]">
               <strong
                 dir="ltr"
                 className="
                   block
-                  text-[clamp(9px,1.25vw,19px)]
+                  text-[clamp(13px,1.25vw,19px)]
                   font-black
                 "
               >
@@ -918,7 +919,7 @@ export default function HeroSection() {
                 className={`
                   mt-1
                   block
-                  text-[clamp(5px,0.7vw,11px)]
+                  text-[clamp(9px,0.7vw,11px)]
 
                   ${
                     dark
@@ -931,128 +932,6 @@ export default function HeroSection() {
               </span>
             </div>
           </div>
-        </motion.div>
-
-        {/* ======================================================
-            RIGHT SIDE
-            ALWAYS RIGHT
-        ====================================================== */}
-
-        <motion.div
-          dir="ltr"
-          initial={{
-            opacity: 0,
-            x: 50,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            duration: 1,
-            delay: 0.15,
-            ease: [0.2, 0.8, 0.2, 1],
-          }}
-          className="
-            relative
-            z-10
-            overflow-visible
-
-            md:min-h-[460px]
-            lg:min-h-[500px]
-          "
-        >
-          {/* ======================================================
-              DOCTOR
-              ALWAYS RIGHT
-
-              RESPONSIVE NOTE:
-              Below md (while the grid is still a single stacked
-              column) the image stays in normal flow and centered,
-              so it can never overlap the text block above it. From
-              md upward — exactly where the grid switches back to
-              the 46%/54% side-by-side layout — the image becomes
-              absolutely positioned again to reproduce the original
-              bleed effect. The original lg-and-up values
-              (right-[-29%], w-[78vw], min-w-[650px], and the
-              1100px/1400px overrides) are untouched.
-          ====================================================== */}
-
-          
-
-          {/* ======================================================
-              CARE LOOKS BETTER HERE
-          ====================================================== */}
-
-          <motion.div
-            dir="ltr"
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            transition={{
-              delay: 0.9,
-              duration: 0.8,
-            }}
-            className="
-              absolute
-              right-[4%]
-              top-[8%]
-              z-30
-              flex
-              rotate-[-7deg]
-              flex-col
-              text-left
-              text-[clamp(15px,2.7vw,45px)]
-              leading-[0.92]
-              text-[#8a8a8a]
-              opacity-90
-
-              sm:right-[5%]
-              sm:top-[8%]
-
-              md:right-[5%]
-              md:top-[8%]
-
-              lg:right-[5%]
-              lg:top-[8%]
-            "
-            style={{
-              fontFamily:
-                "'Segoe Script', 'Brush Script MT', cursive",
-              fontWeight: 400,
-              letterSpacing: "-2px",
-            }}
-          >
-            <span>Care</span>
-
-            <span className="ml-[0.15em]">
-              Looks
-            </span>
-
-            <span className="ml-[0.35em]">
-              Better
-            </span>
-
-            <span className="ml-[0.7em]">
-              Here
-            </span>
-
-            <span
-              className="
-                mt-[0.35em]
-                ml-[0.8em]
-                block
-                h-[2px]
-                w-[2.5em]
-                rotate-[-10deg]
-                bg-[#8a8a8a]
-                opacity-80
-              "
-            />
-          </motion.div>
         </motion.div>
       </div>
     </section>
