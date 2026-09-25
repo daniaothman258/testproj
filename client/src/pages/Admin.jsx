@@ -11,6 +11,31 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+/* =========================================================
+   IMAGE URL HELPER
+   - Cloudinary URLs stay unchanged
+   - Static /products images stay unchanged
+   - Legacy /uploads images use backend URL
+========================================================= */
+
+const imageSrc = (src = "") => {
+  if (!src) return "";
+
+  if (/^https?:\/\//i.test(src)) {
+    return src;
+  }
+
+  if (src.startsWith("/products/")) {
+    return src;
+  }
+
+  if (src.startsWith("/uploads/")) {
+    return `${API_URL}${src}`;
+  }
+
+  return src;
+};
+
 const empty = {
   nameAr: "",
   nameEn: "",
@@ -38,6 +63,11 @@ export default function Admin() {
   const [form, setForm] = useState(empty);
   const [editing, setEditing] = useState(null);
   const [q, setQ] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  /* =========================================================
+     LOAD ADMIN DATA
+  ========================================================= */
 
   const load = async () => {
     try {
@@ -64,44 +94,93 @@ export default function Admin() {
     }
   }, []);
 
+  /* =========================================================
+     SAVE PRODUCT
+  ========================================================= */
+
   const save = async (e) => {
     e.preventDefault();
 
-    if (editing) {
-      await api.updateProduct(editing, form);
-    } else {
-      await api.addProduct(form);
+    try {
+      if (editing) {
+        await api.updateProduct(editing, form);
+      } else {
+        await api.addProduct(form);
+      }
+
+      setForm(empty);
+      setEditing(null);
+
+      await load();
+
+      alert("تم حفظ المنتج بنجاح ✓");
+    } catch (error) {
+      alert(error.message || "تعذر حفظ المنتج");
     }
-
-    setForm(empty);
-    setEditing(null);
-
-    await load();
-
-    alert("تم حفظ المنتج بنجاح ✓");
   };
+
+  /* =========================================================
+     EDIT PRODUCT
+  ========================================================= */
 
   const edit = (p) => {
     setEditing(p.id);
-    setForm({ ...p });
+    setForm({
+      ...empty,
+      ...p,
+      images: Array.isArray(p.images) ? p.images : [],
+      colors: Array.isArray(p.colors) ? p.colors : [],
+      sizes: Array.isArray(p.sizes) ? p.sizes : [],
+    });
     setTab("products");
   };
 
+  /* =========================================================
+     DELETE PRODUCT
+  ========================================================= */
+
   const del = async (id) => {
     if (confirm("حذف المنتج؟")) {
-      await api.deleteProduct(id);
-      await load();
+      try {
+        await api.deleteProduct(id);
+        await load();
+      } catch (error) {
+        alert(error.message || "تعذر حذف المنتج");
+      }
     }
   };
 
-  const upload = async (files) => {
-    const r = await api.upload(files);
+  /* =========================================================
+     UPLOAD PRODUCT IMAGES
+     Cloudinary URLs are returned by the backend
+  ========================================================= */
 
-    setForm((f) => ({
-      ...f,
-      images: [...(f.images || []), ...r.urls],
-    }));
+  const upload = async (files) => {
+    const selected = [...(files || [])];
+
+    if (!selected.length) {
+      return;
+    }
+
+    try {
+      setUploading(true);
+
+      const r = await api.upload(selected);
+
+      setForm((f) => ({
+        ...f,
+        images: [...(f.images || []), ...(r.urls || [])],
+      }));
+    } catch (error) {
+      alert(error.message || "تعذر رفع الصورة");
+    } finally {
+      setUploading(false);
+    }
   };
+
+  /* =========================================================
+     FILTER ORDERS
+  ========================================================= */
 
   const filtered = orders.filter((o) =>
     `${o.customer_name} ${o.phone} ${o.order_number}`
@@ -119,7 +198,6 @@ export default function Admin() {
       "
     >
       <div className="flex">
-
         {/* ======================================================
             SIDEBAR
         ====================================================== */}
@@ -211,7 +289,6 @@ export default function Admin() {
             md:p-8
           "
         >
-
           {/* MOBILE SELECT */}
 
           <div className="md:hidden mb-4">
@@ -392,7 +469,6 @@ export default function Admin() {
                 gap-6
               "
             >
-
               {/* ==================================================
                   PRODUCT FORM
               ================================================== */}
@@ -558,7 +634,6 @@ export default function Admin() {
                     mt-4
                   "
                 >
-
                   {/* PRICE */}
 
                   <label className="block">
@@ -732,7 +807,9 @@ export default function Admin() {
                   />
                 </label>
 
-                {/* PRODUCT IMAGES */}
+                {/* ==================================================
+                    PRODUCT IMAGES
+                ================================================== */}
 
                 <label className="block mt-4">
                   <span
@@ -750,13 +827,32 @@ export default function Admin() {
                   <input
                     type="file"
                     multiple
-                    accept="image/*"
+                    accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.avif"
                     className="!text-black"
-                    onChange={(e) => upload(e.target.files)}
+                    disabled={uploading}
+                    onChange={(e) => {
+                      upload(e.target.files);
+                      e.target.value = "";
+                    }}
                   />
+
+                  {uploading && (
+                    <div
+                      className="
+                        mt-2
+                        text-xs
+                        font-bold
+                        !text-neutral-600
+                      "
+                    >
+                      جاري رفع الصور...
+                    </div>
+                  )}
                 </label>
 
-                {/* IMAGE PREVIEW */}
+                {/* ==================================================
+                    IMAGE PREVIEW
+                ================================================== */}
 
                 <div
                   className="
@@ -767,10 +863,13 @@ export default function Admin() {
                   "
                 >
                   {form.images?.map((im, i) => (
-                    <div className="relative" key={im}>
+                    <div
+                      className="relative"
+                      key={`${im}-${i}`}
+                    >
                       <img
-                        src={`${API_URL}${im}`}
-                        alt=""
+                        src={imageSrc(im)}
+                        alt={`Product ${i + 1}`}
                         className="
                           w-full
                           aspect-square
@@ -798,6 +897,7 @@ export default function Admin() {
                           rounded-full
                           px-2
                         "
+                        title="Remove image"
                       >
                         ×
                       </button>
@@ -864,13 +964,16 @@ export default function Admin() {
 
                 <button
                   type="submit"
+                  disabled={uploading}
                   className="
                     btn
                     w-full
                     mt-5
                   "
                 >
-                  حفظ المنتج
+                  {uploading
+                    ? "جاري رفع الصور..."
+                    : "حفظ المنتج"}
                 </button>
 
                 {editing && (
@@ -929,11 +1032,50 @@ export default function Admin() {
                         "
                         key={p.id}
                       >
-                        <div className="text-4xl">
-                          🥼
+                        {/* PRODUCT IMAGE */}
+
+                        <div
+                          className="
+                            h-16
+                            w-16
+                            shrink-0
+                            overflow-hidden
+                            rounded-xl
+                            bg-neutral-100
+                            border
+                            border-neutral-200
+                          "
+                        >
+                          {p.images?.[0] ? (
+                            <img
+                              src={imageSrc(p.images[0])}
+                              alt={
+                                p.nameEn ||
+                                p.nameAr ||
+                                "Product"
+                              }
+                              className="
+                                h-full
+                                w-full
+                                object-cover
+                              "
+                            />
+                          ) : (
+                            <div
+                              className="
+                                grid
+                                h-full
+                                w-full
+                                place-items-center
+                                text-3xl
+                              "
+                            >
+                              🥼
+                            </div>
+                          )}
                         </div>
 
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <b className="!text-black">
                             {p.nameAr} / {p.nameEn}
                           </b>
@@ -947,9 +1089,25 @@ export default function Admin() {
                           >
                             {p.price} JOD • Stock {p.stock}
                           </div>
+
+                          {p.images?.length > 0 && (
+                            <div
+                              className="
+                                text-xs
+                                mt-1
+                                !text-neutral-500
+                              "
+                            >
+                              {p.images.length}{" "}
+                              {p.images.length === 1
+                                ? "image"
+                                : "images"}
+                            </div>
+                          )}
                         </div>
 
                         <button
+                          type="button"
                           className="
                             !text-black
                             font-semibold
@@ -960,6 +1118,7 @@ export default function Admin() {
                         </button>
 
                         <button
+                          type="button"
                           className="
                             !text-red-600
                             font-semibold
@@ -1228,7 +1387,6 @@ export default function Admin() {
               </div>
             </>
           )}
-
         </section>
       </div>
     </main>

@@ -4,9 +4,7 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import multer from "multer";
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
+import { v2 as cloudinary } from "cloudinary";
 
 import {
   initDb,
@@ -28,17 +26,16 @@ const app = express();
 
 await initDb();
 
-const __dirname = path.dirname(
-  fileURLToPath(import.meta.url)
-);
 
-const uploadsDir = path.resolve(
-  __dirname,
-  "../uploads"
-);
+/* =========================================================
+   CLOUDINARY
+========================================================= */
 
-fs.mkdirSync(uploadsDir, {
-  recursive: true
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
 });
 
 
@@ -58,11 +55,6 @@ app.use(
   express.json({
     limit: "10mb"
   })
-);
-
-app.use(
-  "/uploads",
-  express.static(uploadsDir)
 );
 
 
@@ -109,39 +101,75 @@ function auth(req, res, next) {
 
 /* =========================================================
    FILE UPLOAD
+   Images are kept in memory temporarily, then uploaded
+   permanently to Cloudinary.
 ========================================================= */
 
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    cb(
-      null,
-      uploadsDir
-    );
-  },
-
-  filename: (_, file, cb) => {
-    const safe =
-      file.originalname.replace(
-        /[^\w.\-]+/g,
-        "-"
-      );
-
-    cb(
-      null,
-      `${Date.now()}-${safe}`
-    );
-  }
-});
-
-
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
 
   limits: {
     fileSize:
-      6 * 1024 * 1024
+      10 * 1024 * 1024,
+
+    files: 8
+  },
+
+  fileFilter: (_, file, cb) => {
+    if (
+      file.mimetype &&
+      file.mimetype.startsWith("image/")
+    ) {
+      cb(null, true);
+    } else {
+      cb(
+        new Error(
+          "Only image files are allowed"
+        )
+      );
+    }
   }
 });
+
+
+function uploadToCloudinary(file) {
+  return new Promise(
+    (resolve, reject) => {
+      const stream =
+        cloudinary.uploader.upload_stream(
+          {
+            folder:
+              "burda-fashion/products",
+
+            resource_type:
+              "image",
+
+            use_filename:
+              true,
+
+            unique_filename:
+              true,
+
+            overwrite:
+              false
+          },
+
+          (error, result) => {
+            if (error) {
+              reject(error);
+              return;
+            }
+
+            resolve(result);
+          }
+        );
+
+      stream.end(
+        file.buffer
+      );
+    }
+  );
+}
 
 
 /* =========================================================
@@ -501,11 +529,13 @@ app.put(
       const product =
         await Product.findOneAndUpdate(
           {
-            id: req.params.id
+            id:
+              req.params.id
           },
 
           {
-            $set: values
+            $set:
+              values
           },
 
           {
@@ -587,26 +617,103 @@ app.delete(
 
 /* =========================================================
    ADMIN IMAGE UPLOAD
+   Uploads product images to Cloudinary and returns
+   permanent HTTPS URLs.
 ========================================================= */
 
 app.post(
   "/api/admin/upload",
   auth,
+
   upload.array(
     "images",
     8
   ),
 
-  (req, res) => {
-    const urls =
-      (req.files || []).map(
-        (file) =>
-          `/uploads/${file.filename}`
+  async (req, res) => {
+    try {
+      const files =
+        req.files || [];
+
+      if (!files.length) {
+        return res
+          .status(400)
+          .json({
+            message:
+              "No images selected"
+          });
+      }
+
+      const uploaded =
+        await Promise.all(
+          files.map(
+            (file) =>
+              uploadToCloudinary(
+                file
+              )
+          )
+        );
+
+      const urls =
+        uploaded.map(
+          (item) =>
+            item.secure_url
+        );
+
+      res.json({
+        urls
+      });
+    } catch (error) {
+      console.error(
+        "Cloudinary upload error:",
+        error
       );
 
-    res.json({
-      urls
-    });
+      res
+        .status(500)
+        .json({
+          message:
+            "Unable to upload images"
+        });
+    }
+  }
+);
+
+
+/* =========================================================
+   MULTER ERROR HANDLER
+========================================================= */
+
+app.use(
+  (error, req, res, next) => {
+    if (
+      error instanceof
+      multer.MulterError
+    ) {
+      return res
+        .status(400)
+        .json({
+          message:
+            error.code ===
+            "LIMIT_FILE_SIZE"
+              ? "Image is too large. Maximum size is 10 MB."
+              : error.message
+        });
+    }
+
+    if (
+      error?.message ===
+      "Only image files are allowed"
+    ) {
+      return res
+        .status(400)
+        .json({
+          message:
+            error.message
+        });
+    }
+
+    next(error);
   }
 );
 
@@ -697,6 +804,10 @@ app.post(
   }
 );
 
+
+/* =========================================================
+   ADMIN ORDERS
+========================================================= */
 
 app.get(
   "/api/admin/orders",
@@ -1001,6 +1112,31 @@ app.post(
             "Unable to subscribe"
         });
     }
+  }
+);
+
+
+/* =========================================================
+   FINAL ERROR HANDLER
+========================================================= */
+
+app.use(
+  (error, req, res, next) => {
+    console.error(
+      "Server error:",
+      error
+    );
+
+    if (res.headersSent) {
+      return next(error);
+    }
+
+    res
+      .status(500)
+      .json({
+        message:
+          "Internal server error"
+      });
   }
 );
 
