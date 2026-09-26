@@ -17,37 +17,20 @@ export default function MedicalCategories() {
     ? FaArrowLeft
     : FaArrowRight;
 
-  const labCoat = products.find(
-    (product) => product.id === "medical-001"
+  /*
+    Show every active product that belongs to
+    the Medical Clothing category.
+
+    This means any new medical product added
+    from the Admin Dashboard will automatically
+    appear on this page.
+  */
+
+  const medicalProducts = products.filter(
+    (product) =>
+      product.category === "medical-clothing" &&
+      product.is_active !== false
   );
-
-  const scrub = products.find(
-    (product) => product.id === "medical-002"
-  );
-
-  const medicalProducts = [
-    {
-      id: "medical-001",
-      product: labCoat,
-      nameAr: "لاب كوت",
-      nameEn: "Lab Coat",
-      descriptionAr:
-        "لاب كوت طبي أنيق ومريح بتصميم عملي مناسب للعمل اليومي.",
-      descriptionEn:
-        "Elegant and comfortable medical lab coat designed for everyday professional use.",
-    },
-
-    {
-      id: "medical-002",
-      product: scrub,
-      nameAr: "سكراب",
-      nameEn: "Scrub Set",
-      descriptionAr:
-        "سكراب طبي عملي ومريح متوفر بعدة ألوان ومقاسات.",
-      descriptionEn:
-        "Comfortable professional scrub set available in multiple colours and sizes.",
-    },
-  ];
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-14 md:py-20">
@@ -76,16 +59,28 @@ export default function MedicalCategories() {
 
       <div className="grid md:grid-cols-2 gap-7">
 
-        {medicalProducts.map((item) => {
+        {medicalProducts.map((product) => {
           const image =
-            item.product?.images?.[0];
+            product.images?.[0];
 
           const price =
-            item.product?.price;
+            product.price;
+
+          const name =
+            ar
+              ? product.name_ar || product.nameAr
+              : product.name_en || product.nameEn;
+
+          const description =
+            ar
+              ? product.description_ar ||
+                product.descriptionAr
+              : product.description_en ||
+                product.descriptionEn;
 
           return (
             <motion.article
-              key={item.id}
+              key={product.id}
               whileHover={{ y: -7 }}
               transition={{
                 duration: 0.25,
@@ -102,7 +97,7 @@ export default function MedicalCategories() {
             >
 
               <Link
-                to={`/product/${item.id}`}
+                to={`/product/${product.id}`}
                 className="block"
               >
 
@@ -124,11 +119,7 @@ export default function MedicalCategories() {
                   {image ? (
                     <img
                       src={image}
-                      alt={
-                        ar
-                          ? item.nameAr
-                          : item.nameEn
-                      }
+                      alt={name || "BURDA Medical"}
                       className="
                         w-full
                         h-full
@@ -141,9 +132,7 @@ export default function MedicalCategories() {
                     />
                   ) : (
                     <div className="text-8xl">
-                      {item.id === "medical-001"
-                        ? "🥼"
-                        : "👕"}
+                      🥼
                     </div>
                   )}
 
@@ -168,9 +157,7 @@ export default function MedicalCategories() {
                   >
 
                     <h2 className="text-3xl font-black">
-                      {ar
-                        ? item.nameAr
-                        : item.nameEn}
+                      {name || "BURDA Medical"}
                     </h2>
 
                     {price !== undefined &&
@@ -182,11 +169,11 @@ export default function MedicalCategories() {
 
                   </div>
 
-                  <p className="mt-4 text-sm leading-7 opacity-60">
-                    {ar
-                      ? item.descriptionAr
-                      : item.descriptionEn}
-                  </p>
+                  {description && (
+                    <p className="mt-4 text-sm leading-7 opacity-60">
+                      {description}
+                    </p>
+                  )}
 
                   <div
                     className="
