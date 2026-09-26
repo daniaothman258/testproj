@@ -43,11 +43,23 @@ cloudinary.config({
    MIDDLEWARE
 ========================================================= */
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "https://burda-fashion.netlify.app",
+  "https://testproj.daniaathamneh63.workers.dev"
+];
+
 app.use(
   cors({
-    origin:
-      process.env.CLIENT_ORIGIN ||
-      "http://localhost:5173"
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    }
   })
 );
 
