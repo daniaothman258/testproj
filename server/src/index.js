@@ -48,7 +48,8 @@ const allowedOrigins = [
   "http://localhost:5174",
   "http://localhost:5175",
   "https://burda-fashion.netlify.app",
-  "https://testproj.daniaathamneh63.workers.dev"
+  "https://testproj.daniaathamneh63.workers.dev",
+  "https://burdafashionjo.com"
 ];
 
 app.use(
