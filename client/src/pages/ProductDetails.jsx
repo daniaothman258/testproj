@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { api } from "../services/api";
 import { useShop } from "../context/ShopContext";
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [p, setP] = useState(null);
   const [qty, setQty] = useState(1);
   const [size, setSize] = useState("");
@@ -515,9 +516,35 @@ export default function ProductDetails() {
                 dark:text-green-300
               "
             >
-              {ar
-                ? `تمت إضافة ${qty} إلى السلة — المقاس ${size || "-"} — اللون ${color || "-"}`
-                : `Added ${qty} to cart — Size ${size || "-"} — Color ${color || "-"}`}
+              <div>
+                {ar
+                  ? `تمت إضافة ${title} — اللون ${color || "-"} — الكمية ${qty} — المقاس ${size || "-"}`
+                  : `Added ${title} — Color ${color || "-"} — Quantity ${qty} — Size ${size || "-"}`}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => navigate("/cart")}
+                className="
+                  mt-3
+                  inline-flex
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-black
+                  px-6
+                  py-2.5
+                  text-xs
+                  font-black
+                  text-white
+                  transition
+                  hover:opacity-80
+                  dark:bg-white
+                  dark:text-black
+                "
+              >
+                {ar ? "عرض السلة" : "View Cart"}
+              </button>
             </div>
           )}
 
