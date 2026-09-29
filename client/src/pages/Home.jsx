@@ -195,7 +195,7 @@ export default function Home() {
 
             <h2>
               {ar
-                ? "اختاري أسلوبك"
+                ? "اختار أسلوبك"
                 : "Choose your world"}
             </h2>
 
