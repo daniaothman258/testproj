@@ -131,41 +131,64 @@ export function ShopProvider({ children }) {
     }
   }, []);
 
+  /*
+    CART
+
+    كل تركيبة من:
+    المنتج + المقاس + اللون
+    تعتبر عنصرًا مستقلًا داخل السلة.
+
+    مثال:
+    Lab Coat / L / White
+    مختلف عن:
+    Lab Coat / XL / White
+  */
   const add = (p, options = {}) => {
     setCart((c) => {
-      const key = `${p.id}-${options.size || ""}-${
-        options.color || ""
-      }`;
+      const selectedSize =
+        options.size || p.sizes?.[0] || "";
+
+      const selectedColor =
+        options.color || p.colors?.[0] || "";
+
+      const quantity =
+        Number(options.qty) || 1;
+
+      const key =
+        `${p.id}-${selectedSize}-${selectedColor}`;
 
       const found = c.find(
         (x) => x.key === key
       );
 
+      /*
+        إذا كان نفس المنتج بنفس المقاس
+        ونفس اللون موجودًا بالفعل،
+        نزيد الكمية فقط.
+      */
       if (found) {
         return c.map((x) =>
           x.key === key
             ? {
                 ...x,
-                qty:
-                  x.qty +
-                  (options.qty || 1),
+                qty: x.qty + quantity,
               }
             : x
         );
       }
 
+      /*
+        إذا اختلف المقاس أو اللون،
+        نضيفه كسطر جديد مستقل في السلة.
+      */
       return [
         ...c,
         {
           key,
           product: p,
-          qty: options.qty || 1,
-          size:
-            options.size ||
-            p.sizes?.[0],
-          color:
-            options.color ||
-            p.colors?.[0],
+          qty: quantity,
+          size: selectedSize,
+          color: selectedColor,
         },
       ];
     });

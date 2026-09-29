@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 import {
@@ -560,12 +559,9 @@ export default function Home() {
 
           {reviews.map((r, i) => (
 
-            <motion.article
-              key={r.name}
-              className="review-card"
-              whileHover={{
-                y: -6,
-              }}
+            <article
+            key={r.name}
+             className="review-card transition-transform duration-300 hover:-translate-y-1.5"
             >
 
               <div className="review-stars">
@@ -592,8 +588,7 @@ export default function Home() {
                 0{i + 1}
               </em>
 
-            </motion.article>
-
+            </article>
           ))}
 
         </div>

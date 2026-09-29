@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { api } from "../services/api";
 import { useShop } from "../context/ShopContext";
 
 export default function ProductDetails() {
   const { id } = useParams();
-  const navigate = useNavigate();
-
   const [p, setP] = useState(null);
   const [qty, setQty] = useState(1);
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
   const [activeImage, setActiveImage] = useState(0);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   const { add, lang } = useShop();
 
@@ -38,6 +37,7 @@ export default function ProductDetails() {
         setColor(x.colors?.[0] || "");
         setQty(1);
         setActiveImage(0);
+        setAddedToCart(false);
       })
       .catch(() => {
         setP(null);
@@ -62,7 +62,8 @@ export default function ProductDetails() {
       color,
     });
 
-    navigate("/cart");
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 2200);
   };
 
   return (
@@ -493,6 +494,32 @@ export default function ProductDetails() {
                 ? `أضف إلى السلة — ${p.price * qty} JOD`
                 : `Add to Cart — ${p.price * qty} JOD`}
           </button>
+
+          {addedToCart && (
+            <div
+              role="status"
+              className="
+                mt-3
+                rounded-2xl
+                border
+                border-green-200
+                bg-green-50
+                px-4
+                py-3
+                text-center
+                text-sm
+                font-bold
+                text-green-800
+                dark:border-green-900
+                dark:bg-green-950/40
+                dark:text-green-300
+              "
+            >
+              {ar
+                ? `تمت إضافة ${qty} إلى السلة — المقاس ${size || "-"} — اللون ${color || "-"}`
+                : `Added ${qty} to cart — Size ${size || "-"} — Color ${color || "-"}`}
+            </div>
+          )}
 
           {/* =========================
               SHIPPING INFO

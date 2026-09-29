@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { motion } from "framer-motion";
-
+import { LazyMotion, domAnimation, m } from "framer-motion";
 import {
   FaSearch,
   FaShoppingBag,
@@ -51,7 +50,8 @@ export default function HeroSection() {
       ];
 
   return (
-    <section
+    <LazyMotion features={domAnimation}>
+      <section
       dir="ltr"
       className={`
         relative
@@ -163,7 +163,7 @@ export default function HeroSection() {
                     {item.label}
 
                     {isActive && (
-                      <motion.span
+                      <m.span
                         layoutId="burda-navigation-line"
                         className={`
                           absolute
@@ -363,7 +363,7 @@ export default function HeroSection() {
 
         {/* DROPDOWN MENU */}
         {menuOpen && (
-          <motion.div
+          <m.div
             initial={{
               opacity: 0,
               y: -10,
@@ -437,7 +437,7 @@ export default function HeroSection() {
                 {ar ? "لوحة تحكم الأدمن" : "Admin Dashboard"}
               </Link>
             </nav>
-          </motion.div>
+          </m.div>
         )}
       </header>
 
@@ -459,7 +459,7 @@ export default function HeroSection() {
         "
       >
         {/* LEFT / MAIN CONTENT */}
-        <motion.div
+        <m.div
           initial={{
             opacity: 0,
             x: -35,
@@ -830,8 +830,9 @@ export default function HeroSection() {
               </span>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
-    </section>
+      </section>
+    </LazyMotion>
   );
 }
